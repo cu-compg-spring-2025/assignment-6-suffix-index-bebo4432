@@ -21,11 +21,26 @@ def get_args():
 
 def build_suffix_trie(s):
     # YOUR CODE HERE
-    return None
+    trie = {}
+    for i in range(len(s)):
+        s+= '$' # append terminal symbol
+        curr = trie
+        suffix = s[i:]
+        for char in suffix: #add suffix to trie 
+            if char not in curr:
+                curr[char] = {}
+            else:
+                curr = curr[char]
+    return trie
 
 def search_trie(trie, pattern):
-    # YOUR CODE HERE
-    return None
+    curr_node = trie
+    for char in pattern:
+        if char in curr_node:
+            curr_node = curr_node[char]
+        else:
+            return 0  # Pattern not found
+    return len(pattern)  # Pattern found
 
 def main():
     args = get_args()

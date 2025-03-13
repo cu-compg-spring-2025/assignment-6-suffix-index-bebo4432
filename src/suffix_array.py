@@ -25,34 +25,42 @@ def get_args():
 
 def build_suffix_array(T):
     tree = suffix_tree.build_suffix_tree(T)
-    # Your code here
-
-    #defs
-    stack = [0]
+    suf_array = []
+    stack = [(0, 0)]  # (node idx, depth)
     while stack:
-        node_idx = stack.pop()
-        for child in tree[node_idx][CHILDREN]:
-            stack.append(child)
+        node_idx, depth = stack.pop()
+        node = tree[node_idx]
+        if not node[CHILDREN]:
+            suffix_idx = len(T) - depth
+            if suffix_idx >= 0:  # Ensure valid index
+                suf_array.append(suffix_idx)
+        for child in node[CHILDREN].values():
+            stack.append((child, depth + len(tree[child][SUB])))
+    return sorted(suf_array)
 
-
-
-    return None
-
+def compare_suffix(T, suffix_idx, q):
+    i = 0
+    while i < len(q) and suffix_idx + i < len(T) and T[suffix_idx + i] == q[i]:
+        i += 1
+    return i
 
 def search_array(T, suffix_array, q):
-
-    # Your code here
-
-    # binary search
-    lo= -1
+    lo = 0
     hi = len(suffix_array)
-    while (hi - lo > 1):
-        mid = int((lo + hi) / 2)
-        if suffix_array[mid] < q:
-            lo = mid
-        else:
+    best_match_len = 0
+    
+    # Modified binary search
+    while lo < hi:
+        mid = (lo + hi) // 2
+        suffix_idx = suffix_array[mid]
+        match_len = compare_suffix(T, suffix_idx, q)
+        if match_len == len(q) or (suffix_idx + match_len < len(T) and T[suffix_idx + match_len] > q[match_len]):
             hi = mid
-    return hi
+        else:
+            lo = mid + 1
+            
+        best_match_len = max(best_match_len, match_len)
+    return best_match_len
 
 def main():
     args = get_args()
@@ -69,7 +77,7 @@ def main():
 
     if args.query:
         for query in args.query:
-            match_len = search_array(array, query)
+            match_len = search_array(T, array, query)
             print(f'{query} : {match_len}')
 
 if __name__ == '__main__':

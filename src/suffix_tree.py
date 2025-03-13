@@ -64,7 +64,23 @@ def build_suffix_tree(text):
 
 def search_tree(suffix_tree, P):
     # Your code here
-    return None
+    i = 0
+    j = 0
+    while i < len(P):
+        b = P[j]
+        children = suffix_tree[i][CHILDREN]
+        if b not in children:
+            return i
+        b2 = children[b]
+        sub = suffix_tree[b2][SUB]
+        k = 0
+        while k < len(sub) and j + k < len(P) and P[j + k] == sub[k]:
+            k += 1
+        if k < len(sub):
+            return j + k
+        j += k
+        i = b2
+    return len(P)
 
 def main():
     args = get_args()

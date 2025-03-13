@@ -110,7 +110,7 @@ A list of starting indices where the pattern is found in the text.
 ## Experiments
 
 ### Purpose
-The experiments measure the search times for different patterns using the three data structures (Suffix Array, Suffix Trie, and Suffix Tree) and plot the distribution of search times.
+The experiments measure the search times for different patterns using the three data structures (Suffix Array, Suffix Trie, and Suffix Tree) and plot the distribution of search times. *NOTE: For the experiment, the string compared with the pattern is blocks of 1000 through kcnq2.fa.gz*
 
 ### Running the Experiments
 1. Ensure you have the required data files in the `data` folder.
